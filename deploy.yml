@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: myweb
+spec:
+  selector:
+    matchLabels:
+      app: myweb
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: myweb
+    spec:
+      volumes:
+      - name: logpv
+        persistentVolumeClaim:
+          claimName: logpv
+      containers:
+      - name: myweb-pod
+        image: dheeth/kube-web
+        ports:
+        - containerPort: 80
+        volumeMounts:
+          - mountPath: /var/log/httpd
+            name: logpv
